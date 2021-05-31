@@ -13,32 +13,32 @@ class BlockChain extends React.Component{
                     },
                     {
                         id: 1,
-                        hash: '00007369143a44a4fe86c2036d221ad51fd40e0e4040c54ec4b1d7a5638592d8',
-                        nonce: 0,
+                        hash: '00006851b221ec03fa09ab34495fa46d1a634997a556a96e4f0611b8c4aa8005',
+                        nonce: 209713,
                         data: '',
                     },
                     {
                         id: 2,
-                        hash: '0000b378cafff6182c713b55639f907e8ad7df749c64a354d8568b255caabd49',
-                        nonce: 0,
+                        hash: '00003728d39f4341102d28bc571c0cc6727816e46330853f941913030a11f439',
+                        nonce: 37352,
                         data: '',
                     },
                     {
                         id: 3,
-                        hash: '0000078dc9711f0234801d0bc5f15b661d7f17c10e13c2633fb5c725317149de',
-                        nonce: 0,
+                        hash: '00002d9c027ec266807e8a056962f6086c63730d35f9578f18f33c923014da40',
+                        nonce: 113460,
                         data: '',
                     },
                     {
                         id: 4,
-                        hash: '0000034a3c578c103ad8638a1ef808acf4ba91200e560de251a7e28074abcbcd',
-                        nonce: 0,
+                        hash: '0000c3107144ce935b5c2b992c40e15156a0af96f454a55242284473727ce85e',
+                        nonce: 22632,
                         data: '',
                     },
                     {
                         id: 5,
-                        hash: '0000a4928af4dc5653f35b43687c54def7aa49541b86c4099a9b850509d1653e',
-                        nonce: 448,
+                        hash: '000043c99df8ae502f92f8c972dd7e0f387a7898815031f5624a63b363e0e2eb',
+                        nonce: 8501,
                         data: '',
                     },      
          ],
@@ -60,7 +60,11 @@ class BlockChain extends React.Component{
         let blockvalues = [...this.state.blocks]
         var nonce = this.state.blocks[index].nonce;
         var prevhash = this.state.blocks[index-1].hash;
-        const digest = shajs('sha256').update(JSON.stringify(value)+ prevhash + index + nonce).digest('hex')
+        console.log("data:" + value)
+        console.log("prevhash:" + prevhash)
+        console.log("index:" + index)
+        console.log("nonce" + nonce)
+        const digest = shajs('sha256').update(index + prevhash + value + nonce).digest('hex')
         blockvalues[index] = {
             id: index,
             hash: digest,
@@ -75,7 +79,7 @@ class BlockChain extends React.Component{
             nonce = this.state.blocks[i].nonce;
             data = this.state.blocks[i].data;
             prevhash = this.state.blocks[i-1].hash;
-            const digest = shajs('sha256').update(data + prevhash + i).digest('hex')
+            const digest = shajs('sha256').update(index + prevhash + data + nonce).digest('hex')
             blockvalues[i] = {
                 id: index,
                 hash: digest,
@@ -107,9 +111,13 @@ class BlockChain extends React.Component{
         while(hash.substr(0,4) !== Array(5).join("0"))
             {
                 nonce++;
-                hash = shajs('sha256').update( index + prevhash + JSON.stringify(data) + nonce).digest('hex')
+                hash = shajs('sha256').update( index + prevhash + data + nonce).digest('hex')
             }
         let updatedblockvalues = [...this.state.blocks];
+        console.log("data:" + data)
+        console.log("prevhash:" + prevhash)
+        console.log("index:" + index)
+        console.log("nonce" + nonce)
         updatedblockvalues[index] = {
             id: index,
             hash: hash,
